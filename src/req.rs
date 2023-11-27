@@ -2,22 +2,24 @@ use crate::api::ApiProblem;
 
 pub(crate) type ReqResult<T> = std::result::Result<T, ApiProblem>;
 
-// const TIMEOUT_DURATION: std::time::Duration = std::time::Duration::from_secs(30);
+const TIMEOUT_DURATION: std::time::Duration = std::time::Duration::from_secs(30);
 
 pub(crate) fn req_get(url: &str) -> Result<ureq::Response, ureq::Error> {
-    let req = ureq::get(url); //.timeout(TIMEOUT_DURATION);
+    let req = ureq::get(url).timeout(TIMEOUT_DURATION);
     trace!("{:?}", req);
     req.call()
 }
 
 pub(crate) fn req_head(url: &str) -> Result<ureq::Response, ureq::Error> {
-    let req = ureq::head(url); //.timeout(TIMEOUT_DURATION);
+    let req = ureq::head(url).timeout(TIMEOUT_DURATION);
     trace!("{:?}", req);
     req.call()
 }
 
 pub(crate) fn req_post(url: &str, body: &str) -> Result<ureq::Response, ureq::Error> {
-    let req = ureq::post(url).set("content-type", "application/jose+json"); // .timeout(TIMEOUT_DURATION);
+    let req = ureq::post(url)
+        .set("content-type", "application/jose+json")
+        .timeout(TIMEOUT_DURATION);
     trace!("{:?} {}", req, body);
     req.send_string(body)
 }
